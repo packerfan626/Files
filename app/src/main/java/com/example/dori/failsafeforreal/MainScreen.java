@@ -96,12 +96,11 @@ public class MainScreen extends AppCompatActivity {
     boolean finished = false;
     protected boolean activateActions(){
         final ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
-
-
+        final EditText mTextField = (EditText) findViewById(R.id.mTextField);
         //Set-up Alert Dialog and Text
-        AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
+        final AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
         confirmation.setTitle("Activate Danger Signal?");
-
+        final AlertDialog initial = confirmation.create();
         confirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -116,9 +115,25 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
-        AlertDialog alertDialog = confirmation.create();
-        alertDialog.show();
+        final AlertDialog alertDialog = confirmation.create();
+        new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
 
+                mTextField.setText(millisUntilFinished / 1000 + " seconds until automatic " +
+                        "alert.");
+            }
+
+            public void onFinish() {
+                alertDialog.dismiss();
+                mTextField.setText("");
+                dangerButton.setImageResource(R.drawable.activatedimage);
+            }
+
+        }.start();
+
+
+        mTextField.setText("");
+        alertDialog.show();
 
         return active;
     }
