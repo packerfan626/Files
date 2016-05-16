@@ -9,4 +9,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.dori.failsafeforreal.MainSettingsPage">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:text="Application Settings"
+        android:id="@+id/applicationButton"
+        android:layout_above="@+id/accountButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="45dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:text="Account Settings"
+        android:id="@+id/accountButton"
+        android:layout_above="@+id/helpButton"
+        android:layout_alignLeft="@+id/applicationButton"
+        android:layout_alignStart="@+id/applicationButton"
+        android:layout_alignRight="@+id/applicationButton"
+        android:layout_alignEnd="@+id/applicationButton"
+        android:textSize="45dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:text="Help and Support"
+        android:id="@+id/helpButton"
+        android:layout_above="@+id/termsButton"
+        android:layout_alignLeft="@+id/accountButton"
+        android:layout_alignStart="@+id/accountButton"
+        android:layout_alignRight="@+id/accountButton"
+        android:layout_alignEnd="@+id/accountButton"
+        android:textSize="45dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:text="Terms and Conditions"
+        android:id="@+id/termsButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/helpButton"
+        android:layout_alignStart="@+id/helpButton"
+        android:textSize="45dp" />
 </RelativeLayout>

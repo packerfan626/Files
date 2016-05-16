@@ -37,12 +37,17 @@
 
         <activity
             android:name=".mapView"
-            android:label="@string/title_activity_map_view"></activity>
+            android:label="@string/title_activity_map_view" />
 
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-        <uses-feature android:name="android.hardware.camera2"
-                    android:required = "true" />
+
+        <uses-feature
+            android:name="android.hardware.camera2"
+            android:required="true" />
+
+        <activity android:name=".HelpAndSupport" />
+        <activity android:name=".ApplicationSettings"></activity>
     </application>
 
 </manifest>
