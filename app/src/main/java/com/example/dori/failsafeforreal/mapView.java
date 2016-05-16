@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class mapView extends FragmentActivity {
 
     private GoogleMap mMap;
-
+    public static boolean saver = false;
 
     public static final String TAG = mapView.class.getSimpleName();
 
@@ -46,6 +46,8 @@ public class mapView extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         setUpMapIfNeeded();
+
+
     }
 
     @Override

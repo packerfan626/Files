@@ -1,19 +1,19 @@
 package com.example.dori.failsafeforreal;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class MainSettingsPage extends AppCompatActivity {
-
+    public static boolean saver = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_settings_page);
 
-        //Settings Buttons Declaration
         Button applicationButton = (Button) findViewById(R.id.applicationButton);
         applicationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,5 +45,15 @@ public class MainSettingsPage extends AppCompatActivity {
 
             }
         });
+        View backgroundimage = findViewById(R.id.settingslayout);
+        Drawable background = backgroundimage.getBackground();
+        if(saver){
+
+            background.setAlpha(255);
+        }
+        else{
+            background.setAlpha(0);
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.dori.failsafeforreal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraDevice;
 import android.media.MediaRecorder;
@@ -30,11 +31,13 @@ public class MainScreen extends AppCompatActivity{
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
     Camera camera;
-
+    public static boolean saver = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        displaySpeechRecognizer();
 
         //Settings Button Declaration
         ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsImageButton);
@@ -57,6 +60,7 @@ public class MainScreen extends AppCompatActivity{
         surfaceView = (SurfaceView)findViewById(R.id.surfaceView1);
 
         surfaceHolder = surfaceView.getHolder();
+        surfaceView.setVisibility(View.INVISIBLE);
         //Danger Button Declaration
         ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
         assert dangerButton != null;
@@ -73,6 +77,15 @@ public class MainScreen extends AppCompatActivity{
         mTextField.setFocusable(false);
         mTextField.setClickable(false);
 
+        View backgroundimage = findViewById(R.id.mainlayout);
+        Drawable background = backgroundimage.getBackground();
+        if(saver){
+
+            background.setAlpha(255);
+        }
+        else{
+            background.setAlpha(0);
+        }
     }
 
     //Settings Button Interaction
@@ -97,6 +110,7 @@ public class MainScreen extends AppCompatActivity{
         if (isPlay) {
             dangerButton.setImageResource(R.drawable.dangerimage);
             isPlay = !isPlay;
+            surfaceView.setVisibility(View.INVISIBLE);
         } else {
             bool = activateActions();
             if (!bool) {
@@ -104,7 +118,9 @@ public class MainScreen extends AppCompatActivity{
             }
             //right here //////////////////////////////////////////////////////////////////////////////////////
             try{
+                surfaceView.setVisibility(View.VISIBLE);
                 camera = Camera.open();
+                camera.setDisplayOrientation(90);
             }catch(RuntimeException e){
 
                 return;
@@ -286,7 +302,9 @@ public class MainScreen extends AppCompatActivity{
                         List<String> results = data.getStringArrayListExtra(
                                         RecognizerIntent.EXTRA_RESULTS);
                         String spokenText = results.get(0);
-                        if(spokenText == "Test")
+                    EditText mTextField = (EditText) findViewById(R.id.mTextField);
+                    mTextField.setText(spokenText);
+                        if(spokenText == "test")
                             {
                                 ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
                                 dangerButton.setImageResource(R.drawable.activatedimage);
