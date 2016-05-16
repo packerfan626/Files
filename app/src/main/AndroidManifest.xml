@@ -40,6 +40,15 @@
             android:name=".mapView"
             android:label="@string/title_activity_map_view" />
 
+        <activity
+            android:name=""
+            android:label="MyRunningApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 

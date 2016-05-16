@@ -7,6 +7,7 @@ import android.hardware.camera2.CameraDevice;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.widget.ImageButton;
 
 import com.google.android.gms.appinvite.PreviewActivity;
 import com.google.android.gms.vision.CameraSource;
+
+import java.util.List;
 
 public class MainScreen extends AppCompatActivity{
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -96,6 +99,9 @@ public class MainScreen extends AppCompatActivity{
             isPlay = !isPlay;
         } else {
             bool = activateActions();
+            if (!bool) {
+                isPlay = !isPlay;
+            }
             //right here //////////////////////////////////////////////////////////////////////////////////////
             try{
                 camera = Camera.open();
@@ -114,10 +120,6 @@ public class MainScreen extends AppCompatActivity{
                 camera.startPreview();
             } catch (Exception e) {
                 return;
-            }
-
-            if (!bool) {
-                isPlay = !isPlay;
             }
         }
     }
@@ -149,21 +151,6 @@ public class MainScreen extends AppCompatActivity{
         });
 
         final AlertDialog alertDialog = confirmation.create();
-        new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-
-                mTextField.setText(millisUntilFinished / 1000 + " seconds until automatic " +
-                        "alert.");
-            }
-
-            public void onFinish() {
-                alertDialog.dismiss();
-                mTextField.setText("");
-                dangerButton.setImageResource(R.drawable.activatedimage);
-            }
-
-        }.start();
-
 
         mTextField.setText("");
         alertDialog.show();
@@ -279,4 +266,32 @@ public class MainScreen extends AppCompatActivity{
             // TODO Auto-generated method stub
         }
     }*/
+
+    private static final int SPEECH_REQUEST_CODE = 0;
+
+                // Create an intent that can start the Speech Recognizer activity
+                private void displaySpeechRecognizer() {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+               intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        // Start the activity, the intent will be populated with the speech text
+                        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+           }
+
+                // This callback is invoked when the Speech Recognizer returns.
+            // This is where you process the intent and extract the speech text from the intent.
+                @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+                        List<String> results = data.getStringArrayListExtra(
+                                        RecognizerIntent.EXTRA_RESULTS);
+                        String spokenText = results.get(0);
+                        if(spokenText == "Test")
+                            {
+                                ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
+                                dangerButton.setImageResource(R.drawable.activatedimage);
+                            }
+                    }
+                super.onActivityResult(requestCode, resultCode, data);
+           }
 }
