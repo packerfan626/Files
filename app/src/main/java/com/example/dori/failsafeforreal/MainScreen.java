@@ -26,18 +26,17 @@ import com.google.android.gms.vision.CameraSource;
 
 import java.util.List;
 
-public class MainScreen extends AppCompatActivity{
+public class MainScreen extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
     Camera camera;
     public static boolean saver = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
-        displaySpeechRecognizer();
 
         //Settings Button Declaration
         ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsImageButton);
@@ -57,7 +56,7 @@ public class MainScreen extends AppCompatActivity{
         });
 
         //camera view
-        surfaceView = (SurfaceView)findViewById(R.id.surfaceView1);
+        surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
 
         surfaceHolder = surfaceView.getHolder();
         surfaceView.setVisibility(View.INVISIBLE);
@@ -79,11 +78,10 @@ public class MainScreen extends AppCompatActivity{
 
         View backgroundimage = findViewById(R.id.mainlayout);
         Drawable background = backgroundimage.getBackground();
-        if(saver){
+        if (saver) {
 
             background.setAlpha(255);
-        }
-        else{
+        } else {
             background.setAlpha(0);
         }
     }
@@ -107,35 +105,40 @@ public class MainScreen extends AppCompatActivity{
         ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
         //Switch images depending on current image
 
-        if (isPlay) {
+        bool = false;
+
+        if (!isPlay) {
+            cancelActivation();
             dangerButton.setImageResource(R.drawable.dangerimage);
             isPlay = !isPlay;
             surfaceView.setVisibility(View.INVISIBLE);
+
         } else {
             bool = activateActions();
             if (!bool) {
                 isPlay = !isPlay;
-            }
-            //right here //////////////////////////////////////////////////////////////////////////////////////
-            try{
-                surfaceView.setVisibility(View.VISIBLE);
-                camera = Camera.open();
-                camera.setDisplayOrientation(90);
-            }catch(RuntimeException e){
 
-                return;
-            }
+                //right here //////////////////////////////////////////////////////////////////////////////////////
+                try {
+                    surfaceView.setVisibility(View.VISIBLE);
+                    camera = Camera.open();
+                    camera.setDisplayOrientation(90);
+                } catch (RuntimeException e) {
+
+                    return;
+                }
 //                Camera.Parameters param;
 //                param = camera.getParameters();
 //                //modify parameter
 //                //param.setPreviewFrameRate(20);
 //                param.setPreviewSize(176, 144);
 //                camera.setParameters(param);
-            try {
-                camera.setPreviewDisplay(surfaceHolder);
-                camera.startPreview();
-            } catch (Exception e) {
-                return;
+                try {
+                    camera.setPreviewDisplay(surfaceHolder);
+                    camera.startPreview();
+                } catch (Exception e) {
+                    return;
+                }
             }
         }
     }
@@ -192,7 +195,6 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
-
         AlertDialog alertDialog = confirmation.create();
         alertDialog.show();
     }
@@ -200,6 +202,7 @@ public class MainScreen extends AppCompatActivity{
     protected void turnOffActions() {
 
     }
+}
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////ALL TRIAL STUFF FOR CAMERA /////////////////////////////////////////////////////////////////
@@ -283,33 +286,3 @@ public class MainScreen extends AppCompatActivity{
         }
     }*/
 
-    private static final int SPEECH_REQUEST_CODE = 0;
-
-                // Create an intent that can start the Speech Recognizer activity
-                private void displaySpeechRecognizer() {
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-               intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        // Start the activity, the intent will be populated with the speech text
-                        startActivityForResult(intent, SPEECH_REQUEST_CODE);
-           }
-
-                // This callback is invoked when the Speech Recognizer returns.
-            // This is where you process the intent and extract the speech text from the intent.
-                @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-                        List<String> results = data.getStringArrayListExtra(
-                                        RecognizerIntent.EXTRA_RESULTS);
-                        String spokenText = results.get(0);
-                    EditText mTextField = (EditText) findViewById(R.id.mTextField);
-                    mTextField.setText(spokenText);
-                        if(spokenText == "test")
-                            {
-                                ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
-                                dangerButton.setImageResource(R.drawable.activatedimage);
-                            }
-                    }
-                super.onActivityResult(requestCode, resultCode, data);
-           }
-}
