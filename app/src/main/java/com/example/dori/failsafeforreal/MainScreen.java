@@ -86,6 +86,25 @@ public class MainScreen extends AppCompatActivity {
         startActivity(new Intent(MainScreen.this, mapView.class));
     }
 
+//    protected void launchCamera(int visibility){
+//        surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
+//        assert surfaceView != null;
+//        surfaceHolder = surfaceView.getHolder();
+//        surfaceView.setVisibility(visibility);
+//        try {
+//            camera = Camera.open();
+//            camera.setDisplayOrientation(90);
+//
+//        } catch (RuntimeException e) {
+//            return;
+//        }
+//        try {
+//            camera.setPreviewDisplay(surfaceHolder);
+//            camera.startPreview();
+//        } catch (Exception e) {
+//            return;
+//        }
+//    }
     //All Danger Button interaction
     boolean isPlay = false;
     protected void dangerButton(View v) {
@@ -96,10 +115,12 @@ public class MainScreen extends AppCompatActivity {
         else{
             boolean bool = activateActions();
             if (bool) {
+               // launchCamera(View.VISIBLE);
                 //right here //////////////////////////////////////////////////////////////////////////////////////
                 try {
                     camera = Camera.open();
                     camera.setDisplayOrientation(90);
+
                 } catch (RuntimeException e) {
                     return;
                 }
@@ -124,6 +145,19 @@ public class MainScreen extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dangerButton.setImageResource(R.drawable.activatedimage);
                 surfaceView.setVisibility(View.VISIBLE);
+                try {
+                    camera = Camera.open();
+                    camera.setDisplayOrientation(90);
+
+                } catch (RuntimeException e) {
+                    return;
+                }
+                try {
+                    camera.setPreviewDisplay(surfaceHolder);
+                    camera.startPreview();
+                } catch (Exception e) {
+                    return;
+                }
                 isPlay = !isPlay;
                 active = true;
             }
