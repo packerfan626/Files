@@ -40,7 +40,6 @@ public class MainScreen extends AppCompatActivity {
 
         //Settings Button Declaration
         ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsImageButton);
-        assert settingsButton != null;
         settingsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 settingsButton(v);
@@ -48,7 +47,6 @@ public class MainScreen extends AppCompatActivity {
         });
 
         final Button mapButton = (Button) findViewById(R.id.nearybyAlertsButton);
-        assert mapButton != null;
         mapButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mapButton(v);
@@ -57,29 +55,21 @@ public class MainScreen extends AppCompatActivity {
 
         //camera view
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
-
         surfaceHolder = surfaceView.getHolder();
         surfaceView.setVisibility(View.INVISIBLE);
+
         //Danger Button Declaration
         ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
-        assert dangerButton != null;
         dangerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dangerButton(v);
-
             }
         });
-
-        //EditMText Field
-        EditText mTextField = (EditText) findViewById(R.id.mTextField);
-        mTextField.setFocusable(false);
-        mTextField.setClickable(false);
 
         View backgroundimage = findViewById(R.id.mainlayout);
         Drawable background = backgroundimage.getBackground();
         if (saver) {
-
             background.setAlpha(255);
         } else {
             background.setAlpha(0);
@@ -98,41 +88,21 @@ public class MainScreen extends AppCompatActivity {
 
     //All Danger Button interaction
     boolean isPlay = false;
-    boolean bool = false;
-
-
     protected void dangerButton(View v) {
-        ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
         //Switch images depending on current image
-
-        bool = false;
-
-        if (!isPlay) {
-            cancelActivation();
-            dangerButton.setImageResource(R.drawable.dangerimage);
-            isPlay = !isPlay;
-            surfaceView.setVisibility(View.INVISIBLE);
-
-        } else {
-            bool = activateActions();
-            if (!bool) {
-                isPlay = !isPlay;
-
+        if (isPlay) {
+            turnOffActions();
+        }
+        else{
+            boolean bool = activateActions();
+            if (bool) {
                 //right here //////////////////////////////////////////////////////////////////////////////////////
                 try {
-                    surfaceView.setVisibility(View.VISIBLE);
                     camera = Camera.open();
                     camera.setDisplayOrientation(90);
                 } catch (RuntimeException e) {
-
                     return;
                 }
-//                Camera.Parameters param;
-//                param = camera.getParameters();
-//                //modify parameter
-//                //param.setPreviewFrameRate(20);
-//                param.setPreviewSize(176, 144);
-//                camera.setParameters(param);
                 try {
                     camera.setPreviewDisplay(surfaceHolder);
                     camera.startPreview();
@@ -143,64 +113,60 @@ public class MainScreen extends AppCompatActivity {
         }
     }
 
-
     boolean active = false;
-    boolean finished = false;
-
     protected boolean activateActions() {
-        final ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
-        final EditText mTextField = (EditText) findViewById(R.id.mTextField);
         //Set-up Alert Dialog and Text
-        final AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
+        AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
         confirmation.setTitle("Activate Danger Signal?");
-        final AlertDialog initial = confirmation.create();
-        confirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cancelActivation();
-                active = false;
-            }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        confirmation.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dangerButton.setImageResource(R.drawable.activatedimage);
+                surfaceView.setVisibility(View.VISIBLE);
+                isPlay = !isPlay;
                 active = true;
-
             }
         });
 
-        final AlertDialog alertDialog = confirmation.create();
-
-        mTextField.setText("");
-        alertDialog.show();
-
-        return active;
-    }
-
-    boolean valid = false;
-
-    protected void cancelActivation() {
-        final AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
-        confirmation.setTitle("Password Required");
-
-        final EditText et = new EditText(MainScreen.this);
-
-        et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        confirmation.setView(et);
-
-        confirmation.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        confirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                turnOffActions();
+                surfaceView.setVisibility(View.INVISIBLE);
+                active = false;
             }
         });
 
         AlertDialog alertDialog = confirmation.create();
         alertDialog.show();
+
+        return active;
     }
 
     protected void turnOffActions() {
+        AlertDialog.Builder confirmation = new AlertDialog.Builder(MainScreen.this);
+        confirmation.setTitle("Password Required");
 
+        EditText et = new EditText(MainScreen.this);
+        et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        confirmation.setView(et);
+        confirmation.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            ImageButton dangerButton = (ImageButton) findViewById(R.id.dangerButton);
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dangerButton.setImageResource(R.drawable.dangerimage);
+                    if(isPlay) {
+                        isPlay = !isPlay;
+                        surfaceView.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
+
+        AlertDialog alertDialog = confirmation.create();
+        alertDialog.show();
     }
 }
 
